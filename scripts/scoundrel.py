@@ -202,7 +202,7 @@ def ClassicMode(con):
             con.clear()
             return "thanks for playing"
 
-    with open("classic_deck.json", "r") as f:
+    with open(f"{os.path.abspath(os.path.dirname(__file__))}/classic_deck.json", "r") as f:
         deck = loads(f.read())
     game = ClassicGame(deck)
 
@@ -252,11 +252,29 @@ def ClassicMode(con):
 
     # Checks for win conditions
     if game.win_condition > 0:
-        return "you won"
+        return f"""
+    >    {con.light_green}{con.underline}CONGRATULATIONS{con.reset}
+    > 
+    >  1. {con.light_green}Play Again{con.reset}
+    >  Q. {con.dark_gray}Quit{con.reset}
+    > {con.light_cyan}
+    >  """
     elif game.win_condition < 0:
-        return "you lost"
+        return f"""
+    >    {con.red}{con.underline}GAME OVER{con.reset}
+    > 
+    >  1. {con.light_green}Play Again{con.reset}
+    >  Q. {con.dark_gray}Quit{con.reset}
+    > {con.light_cyan}
+    >  """
     else:
-        return "thanks for playing"
+        return f"""
+    >  Thanks for Playing {con.yellow}Classic Scoundrel{con.light_cyan} v{VERSION_NUMBER}{con.reset}
+    > 
+    >  1. {con.light_green}Play Again{con.reset}
+    >  Q. {con.dark_gray}Quit{con.reset}
+    > {con.light_cyan}
+    >  """
 
 
 if __name__ == "__main__":
@@ -274,8 +292,9 @@ if __name__ == "__main__":
     >  """)
         match boot.lower():
             case "1" | "one":
-                loop = False
-                input(ClassicMode(con))
+                n = input(ClassicMode(con))
+                match n.lower():
+                    case "q" | "quit": loop = False
             case "e" | "exit":
                 loop = False
             case _:
