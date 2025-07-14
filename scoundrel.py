@@ -6,7 +6,7 @@ from demo_assets.scripts.console import Console
 
 try:
     if __name__ == "__main__":
-        VERSION_NUMBER = 0.21  # Build version
+        VERSION_NUMBER = "0.2.1"  # Build version
 
         ## Assets
 
