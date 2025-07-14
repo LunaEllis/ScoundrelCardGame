@@ -1,6 +1,7 @@
 from random import shuffle
 from json import loads, dumps
-import os
+from os import system, name
+from os.path import abspath, dirname
 
 VERSION_NUMBER = 0.1
 
@@ -64,7 +65,7 @@ class Console:
 
     def clear(self):
         print(self.reset)
-        os.system('cls' if os.name == 'nt' else 'clear')
+        system('cls' if name == 'nt' else 'clear')
 
 
 # Class to handle Classic ruleset - deck, room size and max health can still be changed for Classic+ rulesets
@@ -185,7 +186,7 @@ def ClassicRules(con):
 def ClassicMode(con):
     con.clear()
     menu = input(f"""
-    >  Welcome to {con.yellow}Classic Scoundrel{con.light_cyan} v{VERSION_NUMBER}{con.reset}
+    >  Welcome to {con.yellow}Classic Scoundrel{con.reset} - {con.light_cyan}TEXT VERSION{con.reset}
     > 
     >  1. {con.light_green}Play{con.reset}
     >  2. {con.red}Rules{con.reset}
@@ -202,7 +203,7 @@ def ClassicMode(con):
             con.clear()
             return "thanks for playing"
 
-    with open(f"{os.path.abspath(os.path.dirname(__file__))}/classic_deck.json", "r") as f:
+    with open(f"{abspath(dirname(__file__))}/data/classic_deck.json", "r") as f:
         deck = loads(f.read())
     game = ClassicGame(deck)
 
@@ -280,18 +281,19 @@ def ClassicMode(con):
 if __name__ == "__main__":
     con = Console()
     con.clear()
-    print(f"    >  {con.yellow}{con.underline}Scoundrel{con.reset} Card Game {con.cyan}v{VERSION_NUMBER}{con.reset}  -  {con.brown}Text Version{con.reset}")
     loop = True
 
     while loop:
         boot = input(f"""
+    >  {con.yellow}{con.underline}Scoundrel{con.reset} Card Game {con.cyan}v{VERSION_NUMBER}{con.reset}  -  {con.brown}Text Version{con.reset}
     >
-    >  1. {con.light_green}Play Classic Scoundrel{con.reset}
+    >  1. Scoundrel v{VERSION_NUMBER}
+    >  2. {con.light_green}Classic Mode{con.reset}
     >  E. {con.red}Exit Program{con.reset}
     > {con.light_cyan}
     >  """)
         match boot.lower():
-            case "1" | "one":
+            case "2" | "two":
                 n = input(ClassicMode(con))
                 match n.lower():
                     case "q" | "quit": loop = False
