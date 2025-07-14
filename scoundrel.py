@@ -1,48 +1,57 @@
-from os.path import abspath
-from json import load
+from os.path import abspath, dirname
+from json import load, loads
 
 from demo_assets.scripts.classic_mode import classicMode
 from demo_assets.scripts.console import Console
 
-VERSION_NUMBER = 0.1  # Build version
+try:
+    if __name__ == "__main__":
+        VERSION_NUMBER = 0.2  # Build version
 
-## Assets
+        ## Assets
 
-# Lang objects
-with open(abspath("demo_assets/lang/format_codes.json")) as f:
-    FORMAT_CODES = load(f)
-with open(abspath("demo_assets/lang/en.json")) as f:
-    MENU_TEXT = load(f)
+        # Lang objects
+        with open(abspath(f"{dirname(__file__)}/demo_assets/lang/console_format_codes.json")) as f:
+            FORMAT_CODES = load(f)
+        con: Console = Console(FORMAT_CODES)
+        with open(abspath(f"{dirname(__file__)}/demo_assets/lang/en.json")) as f:
+            LANG: dict = loads(con.format_text(f.read()).replace("{ver}", str(VERSION_NUMBER)), strict=False)
 
-# Decks
-with open(abspath("data/classic_deck.json")) as f:
-    CLASSIC_DECK = load(f)
+        # Decks
+        with open(abspath(f"{dirname(__file__)}/data/classic_deck.json")) as f:
+            CLASSIC_DECK = load(f)
 
+        # Main Program Loop
+        loop = True
+        while loop:
+            # con.clear()  # screen clears on each iteration of loop
 
-if __name__ == "__main__":
-    con: Console = Console()
-    loop = True
+            boot = input(f"""
+    {LANG['main_menu_title']}
+    {LANG['new_line']}
+    {LANG['new_line']}1. {LANG['main_menu_01']}
+    {LANG['new_line']}2. {LANG['main_menu_02']}
+    {LANG['new_line']}Q. {LANG['main_menu_03']}
+    {LANG['new_line']}
+    {LANG['user_input']}""")
+            match boot.lower():  # decodes user's input choice, refreshing the screen on invalid entry
+                case "2" | "two":
+                    n = input(classicMode(con, CLASSIC_DECK, LANG))
+                    match n.lower():
+                        case "q" | "quit": loop = False
+                case "q" | "quit":
+                    loop = False
+                case _:
+                    con.clear()
 
-    while loop:
-        con.clear()  # screen clears on each iteration of loop
+        con.clear()
+        exit()  # end of program
 
-        boot = input(f"""
-    >  {con.yellow}{con.underline}Scoundrel{con.reset} Card Game {con.cyan}v{VERSION_NUMBER}{con.reset}  -  {con.brown}Text Version{con.reset}
-    >
-    >  1. Scoundrel v{VERSION_NUMBER}
-    >  2. {con.light_green}Classic Mode{con.reset}
-    >  E. {con.red}Exit Program{con.reset}
-    > {con.light_cyan}
-    >  """)
-        match boot.lower():  # decodes user's input choice, refreshing the screen on invalid entry
-            case "2" | "two":
-                n = input(classicMode(con, CLASSIC_DECK, MENU_TEXT, VERSION_NUMBER))
-                match n.lower():
-                    case "q" | "quit": loop = False
-            case "e" | "exit":
-                loop = False
-            case _:
-                con.clear()
-
-    con.clear()
-    exit()  # end of program
+except Exception as e:
+    import sys
+    if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
+        ...
+        # with open("debug.txt", "w") as f:
+        #     f.write(str(e))
+    else:
+        print(e)

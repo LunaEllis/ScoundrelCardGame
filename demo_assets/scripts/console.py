@@ -71,13 +71,22 @@ class Console:
 
     # Formats any colour codes in strings (e.g. '#0' -> reset)
     def format_text(self, text: str) -> str:
-        # First check is to remove hashtag escapes, and check for any colour codes. If there are none, text isn't processed
-        result = sub("\\\\#", "{h//}", text)  # escaped hashtags are replaced with a marker
-        if "#" not in result:
-            return sub("{h//}", "#", result)  # markers are replaced with normal hashtags
+        # First check is to remove percent escapes, and check for any colour codes. If there are none, text isn't processed
+        result = sub("\\\\%", "{h//}", text)  # escaped percents are replaced with a marker
+        if "%" not in result:
+            return sub("{h//}", "%", result)  # markers are replaced with normal percents
 
         # Iterates through format code dictionary and replaces each colour code with corresponding value
-        for code, value in self.format_codes:
-            result = sub(code, value, result)
+        for code in self.format_codes:
+            result = sub(str(code), self.format_codes[code], result)
 
         return result
+
+
+if __name__ == "__main__":
+    from json import loads
+    with open("../lang/console_format_codes.json") as f:
+        codes = loads(f.read())
+    con = Console(codes)
+
+    print(con.format_text("This text is normal. %bThis text is blue%0."))

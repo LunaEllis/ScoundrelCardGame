@@ -61,8 +61,3 @@ List of colours:
 {con.negative}negative{con.reset}
 {con.crossed}crossed
 {con.reset}reset""")
-
-
-txt = "The last word in this sentence is #bBlue. But I can still use a hashtag (\\#) in my text."
-x = sub('\\\\#', "#", txt)
-print(sub("#b", "{BLUE}", x))

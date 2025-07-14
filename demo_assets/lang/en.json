@@ -1,7 +1,38 @@
 {
-  "line_header": "#0  > ",
-  "blank_line": "#0  > \n",
-  "user_input": "#0#C  > #0",
+  "new_line": "%0    >  ",
+  "user_input": "%0%C    >  %0",
 
-  "title": ""
+  "main_menu_title": "%Y%uScoundrel%0 Card Game %cv{ver}%0  -  %yText Version%0",
+  "main_menu_01": "%YScoundrel%0 v%c{ver}%0",
+  "main_menu_02": "%GClassic Mode%0",
+  "main_menu_03": "%rQuit Program%0",
+
+  "classic_menu_title": "Welcome to %yClassic Scoundrel%0 - %cTEXT VERSION%0",
+  "classic_menu_01": "%GPlay%0",
+  "classic_menu_02": "%rRules%0",
+  "classic_menu_03": "%2Quit%0",
+
+  "classic_game_title": "%yClassic Scoundrel%0",
+  "classic_game_01": "Cards Remaining:  >%g{deck}%0<",
+  "classic_game_02": "%gHealth%0: >%r{health}%0< | %gWeapon%0: >%c{weapon}%0<",
+
+  "classic_end_menu_win": "%G%uCONGRATULATIONS%0",
+  "classic_end_menu_lose": "%R%uGAME OVER%0",
+  "classic_end_menu_quit": "Thanks for Playing %YClassic Scoundrel %Cv{ver}%0",
+  "classic_end_menu_01": "%GPlay Again%0",
+  "classic_end_menu_02": "%2Quit%0",
+
+  "classic_rules_title": "%b%o%uCLASSIC MODE%0 Rules (page %c{page}%0 of %r{total}%0)",
+  "classic_rules_01": "%bClassic mode%0 is played with a standard deck of cards (the %2Dungeon%0). The %rJok%1ers%0",
+  "classic_rules_02": "and %rRed Face Cards%0 are removed from play.",
+  "classic_rules_03": "The game starts with %c4%0 cards turned over - this is called a %2Room%2. To move to the next %2Room%0,",
+  "classic_rules_04": "you must either face %c3%0 of the %c4%0 cards present, or %pSkip%0 the %2Room%0. You cannot %pSkip%0 more then",
+  "classic_rules_05": "%c1%0 %2Room%0 per turn. The goal is to beat every %2Room%0 in the %2Dungeon%0.",
+  "classic_rules_06": "%RHearts (H)%0 are %RPotions%0 that will %rheal%0 you for their face value.",
+  "classic_rules_07": "%RDiamonds (D)%0 are %CWeapons%0 that attack for their face value.",
+  "classic_rules_08": "%2Black cards (S) & (C)%0 are %2Monsters%0 cards that deal damage for their face value.",
+  "classic_rules_09": "%CWeapons%0 dull as they are used, meaning you can only use it again on %2Monsters%0",
+  "classic_rules_10": "that are %yweaker%0 then the last one it was used on.",
+  "classic_rules_11": "You can only %rheal%0 once per turn, a second or third %RPotion%0 will not have any effect.",
+  "classic_rules_end": "%CPress %0[ENTER]%C to view the next page.%0"
 }

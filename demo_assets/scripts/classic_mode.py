@@ -91,53 +91,60 @@ class ClassicGame:
 
 
 # Print the rules for classic mode
-def classicRules(con: Console) -> None:
+def classicRules(con: Console, lang: dict) -> None:
     con.clear()
     input(f"""
-    >  {con.blue}{con.bold}{con.underline}CLASSIC MODE{con.reset} Rules (page {con.cyan}1{con.reset} of {con.red}2{con.reset})
-    >
-    >  {con.blue}Classic mode{con.reset} is played with a standard deck of cards (the {con.dark_gray}Dungeon{con.reset}). The {con.red}Jok{con.black}ers{con.reset} 
-    >  and {con.red}Red Face Cards{con.reset} are removed from play.
-    >  The game starts with {con.cyan}4{con.reset} cards turned over - this is called a {con.dark_gray}Room{con.reset}. To move to the next {con.dark_gray}Room{con.reset},
-    >  you must either face {con.cyan}3{con.reset} of the {con.cyan}4{con.reset} cards present, or {con.purple}Skip{con.reset} the {con.dark_gray}Room{con.reset}. You cannot {con.purple}Skip{con.reset} more then
-    >  {con.cyan}1{con.reset} {con.dark_gray}Room{con.reset} per turn. The goal is to beat every {con.dark_gray}Room{con.reset} in the {con.dark_gray}Dungeon{con.reset}.
-    > {con.light_cyan}
-    >  Press {con.reset}[ENTER]{con.light_cyan} to view the next page.{con.reset}""")
+{lang['new_line']}{lang['classic_rules_title'].format(page=1,total=2)}
+{lang['new_line']}
+{lang['new_line']}{lang['classic_rules_01']}
+{lang['new_line']}{lang['classic_rules_02']}
+{lang['new_line']}{lang['classic_rules_03']}
+{lang['new_line']}{lang['classic_rules_04']}
+{lang['new_line']}{lang['classic_rules_05']}
+{lang['new_line']}
+{lang['user_input']}{lang['classic_rules_end']}""")
     con.clear()
     input(f"""
-    >  {con.blue}{con.bold}{con.underline}CLASSIC MODE{con.reset} Rules (page {con.cyan}2{con.reset} of {con.red}2{con.reset})
-    >
-    >  {con.light_red}Hearts (H){con.reset} are {con.light_red}Potions{con.reset} that will {con.red}heal{con.reset} you for their face value.
-    >  {con.light_red}Diamonds (D){con.reset} are {con.light_cyan}Weapons{con.reset} that attack for their face value.
-    >  {con.dark_gray}Black cards (S) & (C){con.reset} are {con.dark_gray}Monsters{con.reset} cards that deal damage for their face value.
-    >
-    >  {con.light_cyan}Weapons{con.reset} dull as they are used, meaning you can only use it again on {con.dark_gray}Monsters{con.reset}
-    >  that are {con.brown}weaker{con.reset} then the last one it was used on.
-    >  You can only {con.red}heal{con.reset} once per turn, a second or third {con.light_red}Potion{con.reset} will not have any effect.
-    > {con.light_cyan}
-    >  Press {con.reset}[ENTER]{con.light_cyan} to return.{con.reset}""")
+{lang['new_line']}{lang['classic_rules_title'].format(page=2,total=2)}
+{lang['new_line']}
+{lang['new_line']}{lang['classic_rules_06']}
+{lang['new_line']}{lang['classic_rules_07']}
+{lang['new_line']}{lang['classic_rules_08']}
+{lang['new_line']}
+{lang['new_line']}{lang['classic_rules_09']}
+{lang['new_line']}{lang['classic_rules_10']}
+{lang['new_line']}{lang['classic_rules_11']}
+{lang['new_line']}
+{lang['user_input']}{lang['classic_rules_end']}""")
 
 
 # Text-based version of classic mode
-def classicMode(con: Console, deck: list[tuple], lang: dict, ver: float) -> str:
+def classicMode(con: Console, deck: list[tuple], lang: dict) -> str:
     con.clear()
     menu = input(f"""
-    >  Welcome to {con.yellow}Classic Scoundrel{con.reset} - {con.light_cyan}TEXT VERSION{con.reset}
-    > 
-    >  1. {con.light_green}Play{con.reset}
-    >  2. {con.red}Rules{con.reset}
-    >  Q. {con.dark_gray}Quit{con.reset}
-    > {con.light_cyan}
-    >  """)
+{lang['new_line']}{lang['classic_menu_title']}
+{lang['new_line']}
+{lang['new_line']}1. {lang['classic_menu_01']}
+{lang['new_line']}2. {lang['classic_menu_02']}
+{lang['new_line']}Q. {lang['classic_menu_03']}
+{lang['new_line']}
+{lang['user_input']}""")
     match menu.lower():
         case "1" | "one" | "play":
             pass
         case "2" | "two" | "rules":
-            classicRules(con)
-            return classicMode(con, deck, ver)
+            classicRules(con, lang)
+            return classicMode(con, deck, lang)
         case "q" | "quit":
             con.clear()
-            return "thanks for playing"
+            return f"""
+{lang['new_line']}{lang['classic_end_menu_quit']}
+{lang['new_line']}
+{lang['new_line']}1. {lang['classic_end_menu_01']}
+{lang['new_line']}Q. {lang['classic_end_menu_02']}
+{lang['new_line']}
+{lang['user_input']}"""
+
 
     game: ClassicGame = ClassicGame(deck)
 
@@ -155,24 +162,24 @@ def classicMode(con: Console, deck: list[tuple], lang: dict, ver: float) -> str:
         # Draws the new board
         con.clear()
         inp = input(f"""
-    >  {con.yellow}Classic Scoundrel{con.reset}
+    >  {lang['classic_game_title']}
     >  
-    >  Cards Remaining:  >{con.green}{len(game.deck)}{con.reset}<
+    >  {lang['classic_game_01'].format(deck=len(game.deck))}
     >  1.  {con.card(current_room[0])}    2.  {con.card(current_room[1])}    3.  {con.card(current_room[2])}   4.  {con.card(current_room[3])}
     >  S.  {con.underline if not game.skip_count else ""}SKIP{con.reset}   Q.  {con.underline}{con.bold}QUIT{con.reset}
     >  
-    >  {con.green}Health{con.reset}: >{con.light_red}{game.player_health}{con.reset}< | {con.green}Weapon{con.reset}: >{con.cyan}{game.weapon}{con.reset}<
+    >  {lang['classic_game_02'].format(health=game.player_health, weapon=game.weapon)}
     {con.light_cyan}>  """)
         # Processes player input
         match inp.lower():
             case "1" | "one":
-                if current_room[0] != "<>": game.PlayCard(game.room[0])
+                if current_room[0] != ("<", ">"): game.PlayCard(game.room[0])
             case "2" | "two":
-                if current_room[1] != "<>": game.PlayCard(game.room[1])
+                if current_room[1] != ("<", ">"): game.PlayCard(game.room[1])
             case "3" | "three":
-                if current_room[2] != "<>": game.PlayCard(game.room[2])
+                if current_room[2] != ("<", ">"): game.PlayCard(game.room[2])
             case "4" | "four":
-                if current_room[3] != "<>": game.PlayCard(game.room[3])
+                if current_room[3] != ("<", ">"): game.PlayCard(game.room[3])
             case "s" | "skip":
                 game.SkipRoom()
             case "q" | "quit":
@@ -185,28 +192,28 @@ def classicMode(con: Console, deck: list[tuple], lang: dict, ver: float) -> str:
 
     con.clear()
 
-    # Checks for win conditions
+    # Checks game over conditions, loads the appropriate screen
     if game.win_condition > 0:
         return f"""
-    >    {con.light_green}{con.underline}CONGRATULATIONS{con.reset}
-    > 
-    >  1. {con.light_green}Play Again{con.reset}
-    >  Q. {con.dark_gray}Quit{con.reset}
-    > {con.light_cyan}
-    >  """
+{lang['new_line']}{lang['classic_end_menu_win']}
+{lang['new_line']}
+{lang['new_line']}1. {lang['classic_end_menu_01']}
+{lang['new_line']}Q. {lang['classic_end_menu_02']}
+{lang['new_line']}
+{lang['user_input']}"""
     elif game.win_condition < 0:
         return f"""
-    >    {con.red}{con.underline}GAME OVER{con.reset}
-    > 
-    >  1. {con.light_green}Play Again{con.reset}
-    >  Q. {con.dark_gray}Quit{con.reset}
-    > {con.light_cyan}
-    >  """
+{lang['new_line']}{lang['classic_end_menu_lose']}
+{lang['new_line']}
+{lang['new_line']}1. {lang['classic_end_menu_01']}
+{lang['new_line']}Q. {lang['classic_end_menu_02']}
+{lang['new_line']}
+{lang['user_input']}"""
     else:
         return f"""
-    >  Thanks for Playing {con.yellow}Classic Scoundrel{con.light_cyan} v{ver}{con.reset}
-    > 
-    >  1. {con.light_green}Play Again{con.reset}
-    >  Q. {con.dark_gray}Quit{con.reset}
-    > {con.light_cyan}
-    >  """
+{lang['new_line']}{lang['classic_end_menu_quit']}
+{lang['new_line']}
+{lang['new_line']}1. {lang['classic_end_menu_01']}
+{lang['new_line']}Q. {lang['classic_end_menu_02']}
+{lang['new_line']}
+{lang['user_input']}"""
