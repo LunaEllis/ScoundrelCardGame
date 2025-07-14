@@ -6,7 +6,7 @@ from demo_assets.scripts.console import Console
 
 try:
     if __name__ == "__main__":
-        VERSION_NUMBER = 0.2  # Build version
+        VERSION_NUMBER = 0.21  # Build version
 
         ## Assets
 
@@ -27,13 +27,13 @@ try:
             # con.clear()  # screen clears on each iteration of loop
 
             boot = input(f"""
-    {LANG['main_menu_title']}
-    {LANG['new_line']}
-    {LANG['new_line']}1. {LANG['main_menu_01']}
-    {LANG['new_line']}2. {LANG['main_menu_02']}
-    {LANG['new_line']}Q. {LANG['main_menu_03']}
-    {LANG['new_line']}
-    {LANG['user_input']}""")
+{LANG['new_line']}{LANG['main_menu_title']}
+{LANG['new_line']}
+{LANG['new_line']}1. {LANG['main_menu_01']}
+{LANG['new_line']}2. {LANG['main_menu_02']}
+{LANG['new_line']}Q. {LANG['main_menu_03']}
+{LANG['new_line']}
+{LANG['user_input']}""")
             match boot.lower():  # decodes user's input choice, refreshing the screen on invalid entry
                 case "2" | "two":
                     n = input(classicMode(con, CLASSIC_DECK, LANG))
