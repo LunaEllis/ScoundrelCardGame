@@ -1,3 +1,5 @@
+from re import sub
+
 class Console:
     def __init__(self):
         self.black = "\033[0;30m"
@@ -29,9 +31,10 @@ class Console:
         colour_code = getattr(self, code.lower(), '')
         return f"{colour_code}{text}{self.reset}"
 
+
 con = Console()
 
-print(con.colour("Hello ","red"), con.colour("World!!","light_red"))
+print(con.colour("Hello ", "red"), con.colour("World!!", "light_red"))
 print(f"""
 List of colours:
 {con.black}black{con.reset}
@@ -58,3 +61,8 @@ List of colours:
 {con.negative}negative{con.reset}
 {con.crossed}crossed
 {con.reset}reset""")
+
+
+txt = "The last word in this sentence is #bBlue. But I can still use a hashtag (\\#) in my text."
+x = sub('\\\\#', "#", txt)
+print(sub("#b", "{BLUE}", x))
