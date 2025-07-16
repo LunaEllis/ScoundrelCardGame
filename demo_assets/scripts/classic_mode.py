@@ -3,6 +3,72 @@ from random import shuffle
 from demo_assets.scripts.console import Console
 
 
+# Console Screens
+CLASSIC_GAME_TEXT = """
+{new_line}{classic_game_title}
+{new_line}
+{new_line}{classic_game_01}
+{new_line}{classic_game_02}
+{new_line}{classic_game_03}
+{new_line}
+{new_line}{classic_game_04}
+{user_input}"""
+
+CLASSIC_RULES_01 = """
+{new_line}{classic_rules_title}
+{new_line}
+{new_line}{classic_rules_01}
+{new_line}{classic_rules_02}
+{new_line}{classic_rules_03}
+{new_line}{classic_rules_04}
+{new_line}{classic_rules_05}
+{new_line}
+{user_input}{classic_rules_end}"""
+CLASSIC_RULES_02 = """
+{new_line}{classic_rules_title}
+{new_line}
+{new_line}{classic_rules_06}
+{new_line}{classic_rules_07}
+{new_line}{classic_rules_08}
+{new_line}
+{new_line}{classic_rules_09}
+{new_line}{classic_rules_10}
+{new_line}{classic_rules_11}
+{new_line}
+{user_input}{classic_rules_end}"""
+
+CLASSIC_MENU = """
+{new_line}{classic_menu_title}
+{new_line}
+{new_line}1. {classic_menu_01}
+{new_line}2. {classic_menu_02}
+{new_line}Q. {classic_menu_03}
+{new_line}
+{user_input}"""
+
+CLASSIC_END_WIN = """
+{new_line}{classic_end_menu_win}
+{new_line}
+{new_line}1. {classic_end_menu_01}
+{new_line}Q. {classic_end_menu_02}
+{new_line}
+{user_input}"""
+CLASSIC_END_LOSE = """
+{new_line}{classic_end_menu_lose}
+{new_line}
+{new_line}1. {classic_end_menu_01}
+{new_line}Q. {classic_end_menu_02}
+{new_line}
+{user_input}"""
+CLASSIC_END_QUIT = """
+{new_line}{classic_end_menu_quit}
+{new_line}
+{new_line}1. {classic_end_menu_01}
+{new_line}Q. {classic_end_menu_02}
+{new_line}
+{user_input}"""
+
+
 # Class to handle Classic ruleset - deck, room size and max health can still be changed for Classic+ rulesets
 class ClassicGame:
     def __init__(self, deck: list[tuple], room_size: int = 4, max_health: int = 20):
@@ -93,42 +159,15 @@ class ClassicGame:
 # Print the rules for classic mode
 def classicRules(con: Console, lang: dict) -> None:
     con.clear()
-    input(f"""
-{lang['new_line']}{lang['classic_rules_title'].format(page=1,total=2)}
-{lang['new_line']}
-{lang['new_line']}{lang['classic_rules_01']}
-{lang['new_line']}{lang['classic_rules_02']}
-{lang['new_line']}{lang['classic_rules_03']}
-{lang['new_line']}{lang['classic_rules_04']}
-{lang['new_line']}{lang['classic_rules_05']}
-{lang['new_line']}
-{lang['user_input']}{lang['classic_rules_end']}""")
+    input(CLASSIC_RULES_01.format(**lang).format(page=1,total=2))
     con.clear()
-    input(f"""
-{lang['new_line']}{lang['classic_rules_title'].format(page=2,total=2)}
-{lang['new_line']}
-{lang['new_line']}{lang['classic_rules_06']}
-{lang['new_line']}{lang['classic_rules_07']}
-{lang['new_line']}{lang['classic_rules_08']}
-{lang['new_line']}
-{lang['new_line']}{lang['classic_rules_09']}
-{lang['new_line']}{lang['classic_rules_10']}
-{lang['new_line']}{lang['classic_rules_11']}
-{lang['new_line']}
-{lang['user_input']}{lang['classic_rules_end']}""")
+    input(CLASSIC_RULES_02.format(**lang).format(page=2,total=2))
 
 
 # Text-based version of classic mode
 def classicMode(con: Console, deck: list[tuple], lang: dict) -> str:
     con.clear()
-    menu = input(f"""
-{lang['new_line']}{lang['classic_menu_title']}
-{lang['new_line']}
-{lang['new_line']}1. {lang['classic_menu_01']}
-{lang['new_line']}2. {lang['classic_menu_02']}
-{lang['new_line']}Q. {lang['classic_menu_03']}
-{lang['new_line']}
-{lang['user_input']}""")
+    menu = input(CLASSIC_MENU.format(**lang))
     match menu.lower():
         case "1" | "one" | "play":
             pass
@@ -137,21 +176,14 @@ def classicMode(con: Console, deck: list[tuple], lang: dict) -> str:
             return classicMode(con, deck, lang)
         case "q" | "quit":
             con.clear()
-            return f"""
-{lang['new_line']}{lang['classic_end_menu_quit']}
-{lang['new_line']}
-{lang['new_line']}1. {lang['classic_end_menu_01']}
-{lang['new_line']}Q. {lang['classic_end_menu_02']}
-{lang['new_line']}
-{lang['user_input']}"""
-
+            return CLASSIC_END_QUIT.format(**lang)
 
     game: ClassicGame = ClassicGame(deck)
 
     game_loop = True
     while game_loop:
         # Sets skip count if card is played, resets upon draw
-        if len(game.room) < 4: game.skip_count = 1
+        if len(game.room) < 4 and game.player_health > 0: game.skip_count = 1
 
         # Replaces empty spaces with visual markers - avoids indexing errors
         from copy import copy
@@ -161,15 +193,10 @@ def classicMode(con: Console, deck: list[tuple], lang: dict) -> str:
 
         # Draws the new board
         con.clear()
-        inp = input(f"""
-    >  {lang['classic_game_title']}
-    >  
-    >  {lang['classic_game_01'].format(deck=len(game.deck))}
-    >  1.  {con.card(current_room[0])}    2.  {con.card(current_room[1])}    3.  {con.card(current_room[2])}   4.  {con.card(current_room[3])}
-    >  S.  {con.underline if not game.skip_count else ""}SKIP{con.reset}   Q.  {con.underline}{con.bold}QUIT{con.reset}
-    >  
-    >  {lang['classic_game_02'].format(health=game.player_health, weapon=game.weapon)}
-    {con.light_cyan}>  """)
+        inp = input(CLASSIC_GAME_TEXT.format(**lang).format(u=(con.underline if not game.skip_count else ""), deck=len(game.deck),
+                                                            health=game.player_health, weapon=game.weapon,
+                                                            c1=con.card(current_room[0]), c2=con.card(current_room[1]),
+                                                            c3=con.card(current_room[2]), c4=con.card(current_room[3])))
         # Processes player input
         match inp.lower():
             case "1" | "one":
@@ -194,26 +221,8 @@ def classicMode(con: Console, deck: list[tuple], lang: dict) -> str:
 
     # Checks game over conditions, loads the appropriate screen
     if game.win_condition > 0:
-        return f"""
-{lang['new_line']}{lang['classic_end_menu_win']}
-{lang['new_line']}
-{lang['new_line']}1. {lang['classic_end_menu_01']}
-{lang['new_line']}Q. {lang['classic_end_menu_02']}
-{lang['new_line']}
-{lang['user_input']}"""
+        return CLASSIC_END_WIN.format(**lang)
     elif game.win_condition < 0:
-        return f"""
-{lang['new_line']}{lang['classic_end_menu_lose']}
-{lang['new_line']}
-{lang['new_line']}1. {lang['classic_end_menu_01']}
-{lang['new_line']}Q. {lang['classic_end_menu_02']}
-{lang['new_line']}
-{lang['user_input']}"""
+        return CLASSIC_END_LOSE.format(**lang)
     else:
-        return f"""
-{lang['new_line']}{lang['classic_end_menu_quit']}
-{lang['new_line']}
-{lang['new_line']}1. {lang['classic_end_menu_01']}
-{lang['new_line']}Q. {lang['classic_end_menu_02']}
-{lang['new_line']}
-{lang['user_input']}"""
+        return CLASSIC_END_QUIT.format(**lang)

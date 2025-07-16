@@ -21,19 +21,22 @@ try:
         with open(abspath(f"{dirname(__file__)}/data/classic_deck.json")) as f:
             CLASSIC_DECK = load(f)
 
+        # Console Screens
+        MENU_TEXT = """
+{new_line}{main_menu_title}
+{new_line}
+{new_line}1. {main_menu_01}
+{new_line}2. {main_menu_02}
+{new_line}Q. {main_menu_03}
+{new_line}
+{user_input}"""
+
         # Main Program Loop
         loop = True
         while loop:
             # con.clear()  # screen clears on each iteration of loop
 
-            boot = input(f"""
-{LANG['new_line']}{LANG['main_menu_title']}
-{LANG['new_line']}
-{LANG['new_line']}1. {LANG['main_menu_01']}
-{LANG['new_line']}2. {LANG['main_menu_02']}
-{LANG['new_line']}Q. {LANG['main_menu_03']}
-{LANG['new_line']}
-{LANG['user_input']}""")
+            boot = input(MENU_TEXT.format(**LANG))
             match boot.lower():  # decodes user's input choice, refreshing the screen on invalid entry
                 case "2" | "two":
                     n = input(classicMode(con, CLASSIC_DECK, LANG))

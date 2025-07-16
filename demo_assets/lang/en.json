@@ -14,7 +14,9 @@
 
   "classic_game_title": "%yClassic Scoundrel%0",
   "classic_game_01": "Cards Remaining:  >%g{deck}%0<",
-  "classic_game_02": "%gHealth%0: >%r{health}%0< | %gWeapon%0: >%c{weapon}%0<",
+  "classic_game_02": "1.  {c1}    2.  {c2}    3.  {c3}   4.  {c4}",
+  "classic_game_03": "S.  {u}SKIP%0   Q.  %u%oQUIT%0",
+  "classic_game_04": "%gHealth%0: >%r{health}%0< | %gWeapon%0: >%c{weapon}%0<",
 
   "classic_end_menu_win": "%G%uCONGRATULATIONS%0",
   "classic_end_menu_lose": "%R%uGAME OVER%0",
