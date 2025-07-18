@@ -1,29 +1,24 @@
 {
   "new_line": "%0    >  ",
   "user_input": "%0%C    >  %0",
-
   "main_menu_title": "%Y%uScoundrel%0 Card Game %cv{ver}%0  -  %yText Version%0",
   "main_menu_01": "%YScoundrel%0 v%c{ver}%0",
   "main_menu_02": "%GClassic Mode%0",
   "main_menu_03": "%rQuit Program%0",
-
   "classic_menu_title": "Welcome to %yClassic Scoundrel%0 - %cTEXT VERSION%0",
   "classic_menu_01": "%GPlay%0",
   "classic_menu_02": "%rRules%0",
   "classic_menu_03": "%2Quit%0",
-
   "classic_game_title": "%yClassic Scoundrel%0",
   "classic_game_01": "Cards Remaining:  >%g{deck}%0<",
   "classic_game_02": "1.  {c1}    2.  {c2}    3.  {c3}   4.  {c4}",
   "classic_game_03": "S.  {u}SKIP%0   Q.  %u%oQUIT%0",
   "classic_game_04": "%gHealth%0: >%r{health}%0< | %gWeapon%0: >%c{weapon}%0<",
-
   "classic_end_menu_win": "%G%uCONGRATULATIONS%0",
   "classic_end_menu_lose": "%R%uGAME OVER%0",
   "classic_end_menu_quit": "Thanks for Playing %YClassic Scoundrel %Cv{ver}%0",
   "classic_end_menu_01": "%GPlay Again%0",
   "classic_end_menu_02": "%2Quit%0",
-
   "classic_rules_title": "%b%o%uCLASSIC MODE%0 Rules (page %c{page}%0 of %r{total}%0)",
   "classic_rules_01": "%bClassic mode%0 is played with a standard deck of cards (the %2Dungeon%0). The %rJok%1ers%0",
   "classic_rules_02": "and %rRed Face Cards%0 are removed from play.",

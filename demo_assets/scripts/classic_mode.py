@@ -157,7 +157,7 @@ class ClassicGame:
 
 
 # Print the rules for classic mode
-def classicRules(con: Console, lang: dict) -> None:
+def classicRulesText(con: Console, lang: dict) -> None:
     con.clear()
     input(CLASSIC_RULES_01.format(**lang).format(page=1,total=2))
     con.clear()
@@ -165,15 +165,15 @@ def classicRules(con: Console, lang: dict) -> None:
 
 
 # Text-based version of classic mode
-def classicMode(con: Console, deck: list[tuple], lang: dict) -> str:
+def classicModeText(con: Console, deck: list[tuple], lang: dict) -> str:
     con.clear()
     menu = input(CLASSIC_MENU.format(**lang))
     match menu.lower():
         case "1" | "one" | "play":
             pass
         case "2" | "two" | "rules":
-            classicRules(con, lang)
-            return classicMode(con, deck, lang)
+            classicRulesText(con, lang)
+            return classicModeText(con, deck, lang)
         case "q" | "quit":
             con.clear()
             return CLASSIC_END_QUIT.format(**lang)
