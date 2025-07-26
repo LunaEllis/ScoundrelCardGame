@@ -1,6 +1,6 @@
 {
-  "version-number": "0.2.2",
+  "version-number": "0.3.0",
 
-  "text-based": true,
+  "text-based": false,
   "demo": true
 }

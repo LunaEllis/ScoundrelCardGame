@@ -1,4 +1,6 @@
 from random import shuffle
+from json import load, loads
+from os.path import abspath, dirname
 
 from demo_assets.scripts.console import Console
 
@@ -226,3 +228,40 @@ def classicModeText(con: Console, deck: list[tuple], lang: dict) -> str:
         return CLASSIC_END_LOSE.format(**lang)
     else:
         return CLASSIC_END_QUIT.format(**lang)
+
+
+def main(ver, assets, deck):
+    ## Language
+    with open(abspath(f"{dirname(__file__)}/{assets}/lang/console_format_codes.json")) as y:
+        format_codes = load(y)
+    con: Console = Console(format_codes)
+    with open(abspath(f"{dirname(__file__)}/{assets}/lang/en.json")) as z:
+        lang: dict = loads(con.format_text(z.read()).replace("{ver}", str(ver)), strict=False)
+    ## Console Screens
+    menu_text = """
+    {new_line}{main_menu_title}
+    {new_line}
+    {new_line}1. {main_menu_01}
+    {new_line}2. {main_menu_02}
+    {new_line}Q. {main_menu_03}
+    {new_line}
+    {user_input}"""
+
+    # Main Program Loop
+    loop = True
+    while loop:
+        con.clear()  # screen clears on each iteration of loop
+
+        boot = input(menu_text.format(**lang))
+        match boot.lower():  # decodes user's input choice, refreshing the screen on invalid entry
+            case "2" | "two":
+                n = input(classicModeText(con, deck, lang))
+                match n.lower():
+                    case "q" | "quit": loop = False
+            case "q" | "quit":
+                loop = False
+            case _:
+                con.clear()
+
+    con.clear()
+    exit()  # end of program
