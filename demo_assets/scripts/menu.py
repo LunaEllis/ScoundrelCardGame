@@ -22,13 +22,29 @@ class MenuObjectError(Exception):
 class Text:
     def __init__(self, pos: Pos, text: str, font: Font, colour: RGBA) -> None:
         self.pos = pos
+        self.text = text
         self.font = font
-        self.text = self.font.render(text, True, colour)
-        self.rect = self.text.get_rect()
+        self.colour = colour
+        self.alpha = colour[3]
+        self.visible = True
+
+        self.text_render = self.font.render(text, True, colour)
+        self.rect = self.text_render.get_rect()
         self.rect.topleft = pos
 
+    def recolour(self, new_colour):
+        self.text_render = self.font.render(self.text, True, new_colour)
+
+    def fade_in(self, step: int = 10):
+        if self.alpha < 255: self.alpha = min(self.alpha + step, 255)
+        self.text_render.set_alpha(self.alpha)
+
+    def fade_out(self, step: int = 10):
+        if self.alpha > 0: self.alpha = max(self.alpha - step, 0)
+        self.text_render.set_alpha(self.alpha)
+
     def draw(self, screen: Surface) -> None:
-        screen.blit(self.text, self.rect)
+        screen.blit(self.text_render, self.rect)
 
 
 class Button(Text):
@@ -86,34 +102,39 @@ class Menu:
         for obj in self.objects:
             if isinstance(obj, Button) and obj.rect.collidepoint(mouse_pos): obj.clicked()
 
+    def remove_object(self, obj: object):
+        if obj in self.objects:
+            self.objects.remove(obj)
 
-if __name__ == '__main__':
-    def prnt():
-        print("button hath been pressed!!!")
 
-    pygame.init()
-
-    screen_obj = pygame.display.set_mode((1280, 720))
-
-    title_font = pygame.font.Font(None, size=64)
-    header_font = pygame.font.Font(None, size=48)
-    text_font = pygame.font.Font(None, size=32)
-
-    menu = Menu("menu", screen_obj, title=title_font, header=header_font, text=text_font)
-    menu.add_title((10, 10), "Title Screen", (255, 255, 255, 255))
-    menu.add_header((10, 60), "Header:", (255, 255, 255, 230))
-    menu.add_text((10, 100), "Text block.", (255, 255, 255, 200))
-    menu.add_button((300, 100), "Print!", (255, 255, 255, 200), prnt)
-
-    menu.draw_menu()
-
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                for item in menu.objects: menu.click_detection(event.pos)
-
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                quit()
-
-            pygame.display.update()
+# ## Example Code
+# if __name__ == '__main__':
+#     def prnt():
+#         print("button hath been pressed!!!")
+#
+#     pygame.init()
+#
+#     screen_obj = pygame.display.set_mode((1280, 720))
+#
+#     title_font = pygame.font.Font(None, size=64)
+#     header_font = pygame.font.Font(None, size=48)
+#     text_font = pygame.font.Font(None, size=32)
+#
+#     menu = Menu("menu", screen_obj, title=title_font, header=header_font, text=text_font)
+#     menu.add_title((10, 10), "Title Screen", (255, 255, 255, 255))
+#     menu.add_header((10, 60), "Header:", (255, 255, 255, 230))
+#     menu.add_text((10, 100), "Text block.", (255, 255, 255, 200))
+#     menu.add_button((300, 100), "Print!", (255, 255, 255, 200), prnt)
+#
+#     menu.draw_menu()
+#
+#     while True:
+#         for event in pygame.event.get():
+#             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+#                 for item in menu.objects: menu.click_detection(event.pos)
+#
+#             if event.type == pygame.QUIT:
+#                 pygame.quit()
+#                 quit()
+#
+#             pygame.display.update()
