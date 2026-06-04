@@ -14,7 +14,6 @@ from pygame.freetype import Font
 # Locates program directory
 PROGRAM_DIR: str = getcwd()
 
-
 def filenotfounderror_handler(file_name: str, error: BaseException) -> None:
     """Generic FileNotFoundError handler"""
     print(f"File {file_name} could not be located in {PROGRAM_DIR}.")

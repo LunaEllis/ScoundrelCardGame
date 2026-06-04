@@ -54,16 +54,19 @@ class Dungeon:
 
         self.room: list[CardBase] = []
         self.room_size: int = dungeon['room_size']
-        self.room_topleft: tuple[int, int] = WIDTH // 6, H_OFFSET + HEIGHT // 3
+        self.room_topleft: tuple[int, int] = WIDTH // 5, Y_OFFSET + HEIGHT // 3
 
         self.player: Player = Player(**dungeon['player'])
-        self.weapon_pos: tuple[int, int] = WIDTH // 8, H_OFFSET + HEIGHT * 3 // 4
+        self.weapon_pos: tuple[int, int] = WIDTH // 8, Y_OFFSET + HEIGHT * 3 // 4
 
         self.ui_font = load_font("Exo-Regular.ttf", 32)
-        self.ui_objects = {
-            "health_pos": (WIDTH//2, H_OFFSET + HEIGHT//4),
-            "durability_pos": tuple(multiply(self.weapon_pos, (1, 0.9)))
-        }
+        self.ui_objects = {"health_pos": ((WIDTH // 2) - 200, Y_OFFSET + HEIGHT // 4),
+                           "durability_pos": tuple(multiply(self.weapon_pos, (1, 0.9))),
+                           'game_lost_1': self.ui_font.render("Game Over.", "red", size=72)[0],
+                           'game_lost_2': self.ui_font.render("You Have Lost!", "red", size=72)[0],
+                           'game_won_1': self.ui_font.render("Game Over.", "green", size=72)[0],
+                           'game_won_2': self.ui_font.render("You beat the dungeon!", "green", size=72)[0],
+                           'game_over_pos_1': (WIDTH//2, HEIGHT//2), 'game_over_pos_2': (WIDTH//2, (HEIGHT//2) + 80)}
 
         del dungeon
 
@@ -112,7 +115,7 @@ class Dungeon:
         if self.player.run_flag: return
 
         self.player.run_flag = True
-        self.player.potion_flag = True
+        self.player.potion_flag = False
 
         for card in self.room:
             self.deck.append(card)
@@ -141,6 +144,18 @@ class Dungeon:
                                                             self.player.weapon_durability <= 14 else "--"}]",
                                                             BOOT_SCREEN_INSTRUCTIONS, size=24)[0]
 
+        if len(self.room) <= 1 and len(self.deck) >= 4:
+            self.populate_room()
+            self.player.run_flag = False
+            self.player.potion_flag = False
+
+        return self.game_over()
+
+    def game_over(self):
+        if self.player.health <= 0: return 1
+        if len(self.room) < 1 and len(self.deck) < 4: return 2
+        return 0
+
 
 if __name__ == "__main__":
     pygame.init()
@@ -159,7 +174,7 @@ if __name__ == "__main__":
                 d.interact_with_card(event.pos, event.button)
             if event.type == pygame.KEYDOWN:
                 match event.key:
-                    case pygame.K_ESCAPE: pygame.quit()
+                    case pygame.K_ESCAPE: break
                     case pygame.K_SPACE:
                         if len(d.room) == 4 and len(d.deck) >= 4:
                             d.run_from_room()
@@ -168,14 +183,36 @@ if __name__ == "__main__":
 
         screen.fill("black")
 
-        d.update()
-
-        if len(d.room) <= 1:
-            d.populate_room()
-            d.player.run_flag = False
-            d.player.potion_flag = False
+        game_over = d.update()
+        if game_over > 0: break
 
         d.draw(screen)
 
         pygame.display.flip()
         clock.tick(FRAMERATE)
+
+    screen.fill("black")
+
+    match game_over:
+        case 1: condition = "game_lost"
+        case 2: condition = "game_won"
+        # case _: condition = ""
+
+    if f"{condition}_1" in d.ui_objects:
+        rect_1 = d.ui_objects[f"{condition}_1"].get_rect()
+        rect_1.center = d.ui_objects['game_over_pos_1']
+        rect_2 = d.ui_objects[f"{condition}_2"].get_rect()
+        rect_2.center = d.ui_objects['game_over_pos_2']
+        screen.blit(d.ui_objects[f"{condition}_1"], rect_1)
+        screen.blit(d.ui_objects[f"{condition}_2"], rect_2)
+
+    pygame.display.flip()
+
+    run = True
+    while run:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT: run = False
+            if event.type == pygame.KEYDOWN: run = False
+            if event.type == pygame.MOUSEBUTTONDOWN: run = False
+
+    pygame.quit()
